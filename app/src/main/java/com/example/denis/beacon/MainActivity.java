@@ -1,5 +1,6 @@
 package com.example.denis.beacon;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseSettings;
 import android.os.Bundle;
@@ -45,7 +46,17 @@ public class MainActivity extends AppCompatActivity {
         BeaconParser beaconParser = new BeaconParser()
                 .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24");
 
-        beaconTransmitter  = new BeaconTransmitter(getApplicationContext(), beaconParser);
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if (mBluetoothAdapter == null) {
+            setMessage("Bluetooth not enabled, verify pelase.");
+            buttonBeacon.setVisibility(View.GONE);
+        } else {
+            if (!mBluetoothAdapter.isEnabled()) {
+                beaconTransmitter  = new BeaconTransmitter(getApplicationContext(), beaconParser);
+            }
+        }
+
     }
 
 
